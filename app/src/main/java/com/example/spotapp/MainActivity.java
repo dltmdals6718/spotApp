@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initLayout() {
         setContentView(R.layout.activity_main);
+
+
         MapView mapView = findViewById(R.id.map_view);
         mapView.start(new MapLifeCycleCallback() {
             @Override
