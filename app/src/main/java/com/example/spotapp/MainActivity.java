@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 SpotFragment.setLongitude(longitude);
 
                 //curLabel의 위치 이동
-                SpotFragment.getCurLabel().moveTo(LatLng.from(latitude, longitude));
+                if(SpotFragment.getCurLabel() != null) // SpotFragment로 이동한 적이 없으면 curLabel이 null이라 예외 터짐 방지
+                    SpotFragment.getCurLabel().moveTo(LatLng.from(latitude, longitude));
 
                 // 위도와 경도를 사용하여 현재 위치를 처리합니다.
             }
