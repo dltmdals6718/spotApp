@@ -72,7 +72,7 @@ public class SpotFragment extends Fragment {
 
                 // 라벨 생성
                 LabelStyles styles = kakaoMap.getLabelManager()
-                        .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.blue_marker)));
+                        .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.cur_pos)));
                 LabelOptions options = LabelOptions.from(LatLng.from(latitude,longitude))
                         .setStyles(styles);
                 LabelLayer layer = kakaoMap.getLabelManager().getLayer();
