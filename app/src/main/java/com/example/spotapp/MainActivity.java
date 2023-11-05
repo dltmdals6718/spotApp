@@ -2,14 +2,24 @@ package com.example.spotapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.kakao.vectormap.LatLng;
+import com.kakao.vectormap.label.TrackingManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +34,50 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initLayout();
+
+        /* 위치 관련 코드들 */
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if(permissionCheck == PackageManager.PERMISSION_DENIED){ //위치 권한 확인
+            //위치 권한 요청
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+
+            // 위치 업데이트 요청이 올때마다 실행하는 함수
+            @Override
+            public void onLocationChanged(Location location) {
+                // 새로운 위치 정보가 도착했을 때 호출됩니다.
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                // 현재 latitude, longitude 갱신
+                SpotFragment.setLatitude(latitude);
+                SpotFragment.setLongitude(longitude);
+
+                //curLabel의 위치 이동
+                SpotFragment.getCurLabel().moveTo(LatLng.from(latitude, longitude));
+
+                // 위도와 경도를 사용하여 현재 위치를 처리합니다.
+            }
+
+            // 다른 메서드들 (onStatusChanged, onProviderEnabled, onProviderDisabled)도 구현 가능합니다.
+        };
+
+        // 주기적인 위치 업데이트 등록
+        try {
+            // GPS로부터 위치 업데이트를 요청합니다.
+            // 500ms마다 위치 업데이트 요청 보냄.
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, locationListener);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+        /* -- 위치 관련 코드들 끝 -- */
+
+
+
     }
 
     private void switchFragment(Fragment fragment) {
@@ -35,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private void initLayout() {
 
 
+        /* 하단 바 레이아웃 관련 코드들 */
         homeFragment = new HomeFragment();
         spotFragment = new SpotFragment();
         settingFragment = new SettingFragment();
@@ -60,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        /* 하단 바 레이아웃 관련 코드들 끝 */
 
     }
 }

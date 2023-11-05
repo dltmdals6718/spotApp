@@ -18,9 +18,37 @@ import com.kakao.vectormap.label.LabelLayer;
 import com.kakao.vectormap.label.LabelOptions;
 import com.kakao.vectormap.label.LabelStyle;
 import com.kakao.vectormap.label.LabelStyles;
+import com.kakao.vectormap.label.TrackingManager;
 
 public class SpotFragment extends Fragment {
 
+    private static double longitude;
+    private static double latitude;
+    private static Label curLabel;
+
+    public static double getLongitude() {
+        return longitude;
+    }
+
+    public static void setLongitude(double longitude) {
+        SpotFragment.longitude = longitude;
+    }
+
+    public static double getLatitude() {
+        return latitude;
+    }
+
+    public static void setLatitude(double latitude) {
+        SpotFragment.latitude = latitude;
+    }
+
+    public static Label getCurLabel() {
+        return curLabel;
+    }
+
+    public static void setCurLabel(Label curLabel) {
+        SpotFragment.curLabel = curLabel;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,17 +68,20 @@ public class SpotFragment extends Fragment {
         }, new KakaoMapReadyCallback() {
             @Override
             public void onMapReady(KakaoMap kakaoMap) {
-
                 // 인증 후 API 가 정상적으로 실행될 때 호출됨
+
+                // 라벨 생성
                 LabelStyles styles = kakaoMap.getLabelManager()
                         .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.blue_marker)));
-
-                LabelOptions options = LabelOptions.from(LatLng.from(35.24589,128.6920))
+                LabelOptions options = LabelOptions.from(LatLng.from(latitude,longitude))
                         .setStyles(styles);
-
                 LabelLayer layer = kakaoMap.getLabelManager().getLayer();
-
                 Label label = layer.addLabel(options);
+                curLabel = label;
+
+                // 라벨 추적
+                TrackingManager trackingManager = kakaoMap.getTrackingManager();
+                trackingManager.startTracking(label);
             }
 
             @Override
