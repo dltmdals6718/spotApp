@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
+    <EditText
+        android:id="@+id/inquiryTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="문의페이지">
-    </TextView>
+        android:layout_height="wrap_content"
+        android:hint="제목">
+    </EditText>
+
+    <EditText
+        android:id="@+id/inquiryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="작성자">
+    </EditText>
+
+    <EditText
+        android:id="@+id/inquiryContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="내용">
+    </EditText>
+
+    <Button
+        android:id="@+id/inquirySubmit"
+        android:layout_width="50pt"
+        android:layout_height="25pt"
+        android:text="제출">
+    </Button>
+
+
 </LinearLayout>
