@@ -42,6 +42,15 @@
             >
         </activity>
 
+        <activity
+            android:name=".InquiryListActivity"
+            android:label="문의내역"
+            android:exported="true"
+            android:parentActivityName=".InquiryListActivity"
+            android:theme="@style/AppTheme"
+            >
+        </activity>
+
     </application>
 
 </manifest>

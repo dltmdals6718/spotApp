@@ -80,6 +80,16 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        // 문의내역 버튼 클릭시 InquiryListActivity로 변경
+        Button inquiryListButton = view.findViewById(R.id.inquiryListButton);
+        inquiryListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), InquiryListActivity.class);
+                startActivity(intent);
+            }
+        });
         
     }
 }
