@@ -27,4 +27,32 @@ public class InquiryData {
     public String toString() {
         return "InquiryData{ id:" + id + " name:" + name + " title:" + title + " content:" + content + " regDate:" + regDate + "}";
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getRegDate() {
+        return regDate;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

@@ -1,15 +1,20 @@
 package com.example.spotapp;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotapp.dto.InquiryData;
 import com.example.spotapp.dto.InquiryListResponse;
 import com.example.spotapp.retrofit.Interface.InquiryRetrofit;
 import com.example.spotapp.retrofit.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -25,6 +30,27 @@ public class InquiryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inquiry_list);
         getInquirys();
+
+        List<InquiryData> test = new ArrayList<>();
+
+        InquiryData t1 = new InquiryData();
+        t1.setName("t1 name");
+        t1.setTitle("t1 title");
+        test.add(t1);
+
+        InquiryData t2 = new InquiryData();
+        t2.setName("t2 name");
+        t2.setTitle("t2 title");
+        test.add(t2);
+
+        RecyclerView recyclerView = findViewById(R.id.rv_inquiry);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InquiryListActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);  // LayoutManager 설정
+        InquiryAdapter inquiryAdapter = new InquiryAdapter(test);
+        recyclerView.setAdapter(inquiryAdapter); // 어댑터 설정
+
+
+
         //testGet();
     }
 

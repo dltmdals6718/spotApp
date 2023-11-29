@@ -7,5 +7,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="문의 게시글들"></TextView>
-
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_inquiry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
+    
 </LinearLayout>
