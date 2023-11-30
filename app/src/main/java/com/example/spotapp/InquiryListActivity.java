@@ -30,25 +30,7 @@ public class InquiryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inquiry_list);
         getInquirys();
-
-        List<InquiryData> test = new ArrayList<>();
-
-        InquiryData t1 = new InquiryData();
-        t1.setName("t1 name");
-        t1.setTitle("t1 title");
-        test.add(t1);
-
-        InquiryData t2 = new InquiryData();
-        t2.setName("t2 name");
-        t2.setTitle("t2 title");
-        test.add(t2);
-
-        RecyclerView recyclerView = findViewById(R.id.rv_inquiry);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InquiryListActivity.this);
-        recyclerView.setLayoutManager(linearLayoutManager);  // LayoutManager 설정
-        InquiryAdapter inquiryAdapter = new InquiryAdapter(test);
-        recyclerView.setAdapter(inquiryAdapter); // 어댑터 설정
-
+        
 
 
         //testGet();
@@ -99,6 +81,13 @@ public class InquiryListActivity extends AppCompatActivity {
                     }
 //                    System.out.println("data = " + data);
                     System.out.println("message = " + message);
+
+                    RecyclerView recyclerView = findViewById(R.id.rv_inquiry);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InquiryListActivity.this);
+                    recyclerView.setLayoutManager(linearLayoutManager);  // LayoutManager 설정
+                    InquiryAdapter inquiryAdapter = new InquiryAdapter(data);
+                    recyclerView.setAdapter(inquiryAdapter); // 어댑터 설정
+
                 } else {
                     System.out.println("FAIL!@!@!");
                 }
