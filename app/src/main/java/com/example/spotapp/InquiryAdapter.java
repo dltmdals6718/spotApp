@@ -1,5 +1,7 @@
 package com.example.spotapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,25 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.InquiryV
             super(itemView);
             title = itemView.findViewById(R.id.rv_inquiryTitle);
             name = itemView.findViewById(R.id.rv_inquiryName);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    InquiryData inquiryData = inquiryList.get(pos);
+
+                    Context context = view.getContext();
+                    Intent inquiryDetailActivity = new Intent(context, InquiryDetailActivity.class);
+                    inquiryDetailActivity.putExtra("id", inquiryData.getId());
+                    inquiryDetailActivity.putExtra("title", inquiryData.getTitle());
+                    inquiryDetailActivity.putExtra("name", inquiryData.getName());
+                    inquiryDetailActivity.putExtra("content", inquiryData.getContent());
+                    inquiryDetailActivity.putExtra("regDate", inquiryData.getRegDate());
+
+                    context.startActivity(inquiryDetailActivity);
+
+                }
+            });
         }
 
 
