@@ -6,6 +6,22 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.spotapp.dto.InquiryCommentData;
+import com.example.spotapp.dto.InquiryCommentsResponse;
+import com.example.spotapp.dto.InquiryData;
+import com.example.spotapp.dto.InquiryListResponse;
+import com.example.spotapp.retrofit.Interface.InquiryRetrofit;
+import com.example.spotapp.retrofit.RetrofitClient;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class InquiryDetailActivity extends AppCompatActivity {
     TextView detail_title, detail_name, detail_content, detail_regDate;
@@ -33,6 +49,48 @@ public class InquiryDetailActivity extends AppCompatActivity {
         detail_name.setText(name);
         detail_regDate.setText(regDate);
         detail_content.setText(content);
+
+        getComments();
+    }
+
+    public void getComments() {
+        Retrofit retrofit = RetrofitClient.getClient();
+        InquiryRetrofit inquiryRetrofit = retrofit.create(InquiryRetrofit.class);
+        Call<InquiryCommentsResponse> inquiry = inquiryRetrofit.getComments(Long.parseLong(id));
+
+        inquiry.enqueue(new Callback<InquiryCommentsResponse>() {
+            @Override
+            public void onResponse(Call<InquiryCommentsResponse> call, Response<InquiryCommentsResponse> response) {
+                if(response.isSuccessful()) {
+                    InquiryCommentsResponse commentsResponse = response.body();
+                    String status = commentsResponse.getStatus();
+                    List<InquiryCommentData> data = commentsResponse.getData();
+                    String message = commentsResponse.getMessage();
+
+
+                    System.out.println("status = " + status);
+                    for (InquiryCommentData datum : data) {
+                        System.out.println("datum = " + datum);
+                    }
+                    System.out.println("message = " + message);
+
+                    RecyclerView recyclerView = findViewById(R.id.rv_comment);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InquiryDetailActivity.this);
+                    recyclerView.setLayoutManager(linearLayoutManager);  // LayoutManager 설정
+                    InquiryCommentAdapter inquiryCommentAdapter = new InquiryCommentAdapter(data);
+                    recyclerView.setAdapter(inquiryCommentAdapter); // 어댑터 설정
+
+                } else {
+                    System.out.println("FAIL!@!@!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InquiryCommentsResponse> call, Throwable t) {
+                System.out.println("t = " + t);
+            }
+        });
+
 
 
     }

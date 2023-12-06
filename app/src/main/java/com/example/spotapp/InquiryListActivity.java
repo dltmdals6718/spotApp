@@ -33,35 +33,8 @@ public class InquiryListActivity extends AppCompatActivity {
         
 
 
-        //testGet();
     }
 
-    void testGet() {
-        Retrofit retrofit = RetrofitClient.getClient();
-        InquiryRetrofit inquiryRetrofit = retrofit.create(InquiryRetrofit.class);
-        Call<InquiryListResponse> inquiry = inquiryRetrofit.getInquiry(11L);
-        inquiry.enqueue(new Callback<InquiryListResponse>() {
-            @Override
-            public void onResponse(Call<InquiryListResponse> call, Response<InquiryListResponse> response) {
-                 if(response.isSuccessful()) {
-                    InquiryListResponse listResponse = response.body();
-                    String status = listResponse.getStatus();
-                    String message = listResponse.getMessage();
-                    List<InquiryData> data = listResponse.getData();
-                    System.out.println("status = " + status);
-                    System.out.println("data = " + data);
-                    System.out.println("message = " + message);
-                } else {
-                    System.out.println("FAIL!@!@!");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<InquiryListResponse> call, Throwable t) {
-                System.out.println("t = " + t);
-            }
-        });
-    }
 
     void getInquirys() {
         Retrofit retrofit = RetrofitClient.getClient();

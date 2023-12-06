@@ -1,6 +1,7 @@
 package com.example.spotapp.retrofit.Interface;
 
 import com.example.spotapp.dto.Inquiry;
+import com.example.spotapp.dto.InquiryCommentsResponse;
 import com.example.spotapp.dto.InquiryData;
 import com.example.spotapp.dto.InquiryListResponse;
 
@@ -22,4 +23,7 @@ public interface InquiryRetrofit {
 
     @GET("/inquirys")
     Call<InquiryListResponse> getInquirys();
+
+    @GET("/comments/{inquiry_id}")
+    Call<InquiryCommentsResponse> getComments(@Path("inquiry_id") Long inquiry_id);
 }
