@@ -32,7 +32,11 @@ public class InquiryDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inquiry_detail_page);
+        getInquiry();
+        getComments();
+    }
 
+    public void getInquiry() {
         detail_title = findViewById(R.id.inquiry_detail_title);
         detail_name = findViewById(R.id.inquiry_detail_name);
         detail_content = findViewById(R.id.inquiry_detail_content);
@@ -49,8 +53,6 @@ public class InquiryDetailActivity extends AppCompatActivity {
         detail_name.setText(name);
         detail_regDate.setText(regDate);
         detail_content.setText(content);
-
-        getComments();
     }
 
     public void getComments() {
