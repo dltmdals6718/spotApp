@@ -36,4 +36,13 @@ public class InquiryCommentData {
     public String getRegDate() {
         return regDate;
     }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

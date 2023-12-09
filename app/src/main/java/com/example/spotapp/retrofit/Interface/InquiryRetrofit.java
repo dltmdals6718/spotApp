@@ -1,6 +1,8 @@
 package com.example.spotapp.retrofit.Interface;
 
+import com.example.spotapp.dto.CommonResponse;
 import com.example.spotapp.dto.Inquiry;
+import com.example.spotapp.dto.InquiryCommentData;
 import com.example.spotapp.dto.InquiryCommentsResponse;
 import com.example.spotapp.dto.InquiryData;
 import com.example.spotapp.dto.InquiryListResponse;
@@ -26,4 +28,7 @@ public interface InquiryRetrofit {
 
     @GET("/comments/{inquiry_id}")
     Call<InquiryCommentsResponse> getComments(@Path("inquiry_id") Long inquiry_id);
+
+    @POST("/comments/{inquiry_id}")
+    Call<CommonResponse<InquiryCommentData>> addComment(@Path("inquiry_id") Long inquiry_id, @Body InquiryCommentData inquiryCommentData);
 }

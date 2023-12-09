@@ -72,8 +72,6 @@
             android:text="내용">
         </TextView>
         </LinearLayout>
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -81,10 +79,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="visible">
-        <TextView
-            android:layout_width="wrap_content"
+
+        <EditText
+            android:id="@+id/inquiry_comment_writer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="댓글 목록"></TextView>
+            android:hint="작성자">
+        </EditText>
+
+        <EditText
+            android:id="@+id/inquiry_comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="내용">
+        </EditText>
+
+        <Button
+            android:id="@+id/inquiry_comment_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="제출">
+        </Button>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_comment"

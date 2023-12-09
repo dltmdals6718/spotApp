@@ -2,6 +2,9 @@ package com.example.spotapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -9,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotapp.dto.CommonResponse;
 import com.example.spotapp.dto.InquiryCommentData;
 import com.example.spotapp.dto.InquiryCommentsResponse;
 import com.example.spotapp.dto.InquiryData;
@@ -34,6 +38,21 @@ public class InquiryDetailActivity extends AppCompatActivity {
         setContentView(R.layout.inquiry_detail_page);
         getInquiry();
         getComments();
+
+        Button button = (Button) findViewById(R.id.inquiry_comment_submit);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String content = ((EditText)findViewById(R.id.inquiry_comment_content)).getText().toString();
+                String writer = ((EditText)(findViewById(R.id.inquiry_comment_writer))).getText().toString();
+                InquiryCommentData inquiryCommentData = new InquiryCommentData();
+                inquiryCommentData.setContent(content);
+                inquiryCommentData.setName(writer);
+                System.out.println("[제출 버튼이 눌러짐]");
+                System.out.println("inquiryCommentData = " + inquiryCommentData);
+                postComment(inquiryCommentData);
+            }
+        });
     }
 
     public void getInquiry() {
@@ -96,4 +115,36 @@ public class InquiryDetailActivity extends AppCompatActivity {
 
 
     }
+
+    public void postComment(InquiryCommentData inquiryCommentData) {
+        Retrofit retrofit = RetrofitClient.getClient();
+        InquiryRetrofit inquiryRetrofit = retrofit.create(InquiryRetrofit.class);
+        Call<CommonResponse<InquiryCommentData>> inquiry = inquiryRetrofit.addComment(Long.parseLong(id), inquiryCommentData);
+
+        inquiry.enqueue(new Callback<CommonResponse<InquiryCommentData>>() {
+            @Override
+            public void onResponse(Call<CommonResponse<InquiryCommentData>> call, Response<CommonResponse<InquiryCommentData>> response) {
+                if(response.isSuccessful()) {
+                    CommonResponse commonResponse = response.body();
+                    String status = commonResponse.getStatus();
+                    InquiryCommentData data = (InquiryCommentData) commonResponse.getData();
+                    String message = commonResponse.getMessage();
+
+
+                    System.out.println("status = " + status);
+                    System.out.println("data = " + data);
+                    System.out.println("message = " + message);
+
+                } else {
+                    System.out.println("FAIL!@!@!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonResponse<InquiryCommentData>> call, Throwable t) {
+                System.out.println("t = " + t);
+            }
+        });
+    }
+
 }
