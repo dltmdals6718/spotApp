@@ -25,6 +25,7 @@ android {
 
         // 읽기 과정 - BuildConfig에 등록
         buildConfigField("String", "SERVER_IP", properties.getProperty("serverAddress"))
+        buildConfigField("String", "NATIVE_APP_KEY", properties.getProperty("NATIVE_APP_KEY"))
     }
 
     buildTypes {
@@ -54,6 +55,8 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.kakao.maps.open:android:2.6.0")
+    implementation("com.kakao.sdk:v2-user:2.18.0")
+    implementation("com.kakao.sdk:v2-cert:2.18.0")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

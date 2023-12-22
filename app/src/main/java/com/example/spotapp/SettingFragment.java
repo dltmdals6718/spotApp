@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.kakao.sdk.common.util.Utility;
+import com.kakao.sdk.user.UserApiClient;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SettingFragment#newInstance} factory method to
@@ -90,6 +93,46 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        
+
+        Button kakaoLoginButton = view.findViewById(R.id.kakaoLoginButton);
+        kakaoLoginButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                System.out.println("카카오 로그인 버튼 클릭");
+                if (UserApiClient.getInstance().isKakaoTalkLoginAvailable(getActivity())) {
+                    login();
+                } else {
+                    accountLogin();
+                }
+            }
+        });
     }
+
+    void login() {
+        System.out.println("KakaoApp Login");
+        UserApiClient.getInstance().loginWithKakaoTalk(getActivity(), ((oAuthToken, throwable) -> {
+            if (throwable != null) {
+                System.out.println("로그인 실패");
+            } else if (oAuthToken != null) {
+                System.out.println("로그인 성공 : " + oAuthToken);
+            }
+            System.out.println("EXIT");
+            return null;
+        }));
+    }
+
+    void accountLogin() {
+        System.out.println("account Login");
+        UserApiClient.getInstance().loginWithKakaoAccount(getActivity(), (oAuthToken, throwable) -> {
+            if (throwable != null) {
+                System.out.println("로그인 실패");
+            } else if (oAuthToken != null) {
+                System.out.println("로그인 성공 : " + oAuthToken);
+            }
+            System.out.println("EXIT");
+            return null;
+        });
+    }
+
 }

@@ -34,6 +34,19 @@
         </activity>
 
         <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="oauth"
+                    android:scheme="kakaoc48b3a64e5508a8c1c6c4ff591dfa478" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".InquiryActivity"
             android:label="문의하기"
             android:exported="true"

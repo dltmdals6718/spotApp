@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.kakao.sdk.common.KakaoSdk;
 import com.kakao.vectormap.LatLng;
 import com.kakao.vectormap.label.TrackingManager;
 
@@ -77,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* -- 위치 관련 코드들 끝 -- */
 
-
-
+        KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY);
     }
 
     private void switchFragment(Fragment fragment) {
