@@ -15,6 +15,7 @@ import com.kakao.vectormap.MapLifeCycleCallback;
 import com.kakao.vectormap.MapView;
 import com.kakao.vectormap.label.Label;
 import com.kakao.vectormap.label.LabelLayer;
+import com.kakao.vectormap.label.LabelLayerOptions;
 import com.kakao.vectormap.label.LabelOptions;
 import com.kakao.vectormap.label.LabelStyle;
 import com.kakao.vectormap.label.LabelStyles;
@@ -25,6 +26,11 @@ public class SpotFragment extends Fragment {
     private static double longitude;
     private static double latitude;
     private static Label curLabel;
+    private static KakaoMap myKakaoMap;
+
+    public static KakaoMap getMyKakaoMap() {
+        return myKakaoMap;
+    }
 
     public static double getLongitude() {
         return longitude;
@@ -70,6 +76,9 @@ public class SpotFragment extends Fragment {
             public void onMapReady(KakaoMap kakaoMap) {
                 // 인증 후 API 가 정상적으로 실행될 때 호출됨
 
+
+                myKakaoMap = kakaoMap;
+
                 // 라벨 생성
                 LabelStyles styles = kakaoMap.getLabelManager()
                         .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.cur_pos)));
@@ -93,4 +102,37 @@ public class SpotFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
+    static void updateLocationLabel(Double latitude, Double longitude) {
+
+        // locationLayer에 존재하는 모든 라벨 삭제
+        if(myKakaoMap.getLabelManager().getLayer("locationLayer") != null) {
+            myKakaoMap.getLabelManager().getLayer("locationLayer").removeAll();
+        }
+
+        // locationLayer 추가
+        myKakaoMap.getLabelManager().addLayer(LabelLayerOptions.from("locationLayer"));
+
+        // location 라벨들 찍기
+        LabelStyles locationStyles = myKakaoMap.getLabelManager()
+                .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.blue_marker)));
+        LabelLayer locationLayer = myKakaoMap.getLabelManager().getLayer("locationLayer");
+
+
+        LabelOptions locationOptions1 = LabelOptions.from(LatLng.from(latitude-0.01,longitude-0.01))
+                .setStyles(locationStyles);
+        LabelOptions locationOptions2 = LabelOptions.from(LatLng.from(latitude-0.01,longitude+0.01))
+                .setStyles(locationStyles);
+        LabelOptions locationOptions3 = LabelOptions.from(LatLng.from(latitude+0.01,longitude-0.01))
+                .setStyles(locationStyles);
+        LabelOptions locationOptions4 = LabelOptions.from(LatLng.from(latitude+0.01,longitude+0.01))
+                .setStyles(locationStyles);
+
+        Label locationLabel1 = locationLayer.addLabel(locationOptions1);
+        Label locationLabel2 = locationLayer.addLabel(locationOptions2);
+        Label locationLabel3 = locationLayer.addLabel(locationOptions3);
+        Label locationLabel4 = locationLayer.addLabel(locationOptions4);
+
+    }
+
 }

@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
                 SpotFragment.setLatitude(latitude);
                 SpotFragment.setLongitude(longitude);
 
+
+                // 주기적인 라벨 업데이트
+                if(SpotFragment.getMyKakaoMap()!=null)
+                    SpotFragment.updateLocationLabel(latitude, longitude);
+
                 //curLabel의 위치 이동
                 if(SpotFragment.getCurLabel() != null) // SpotFragment로 이동한 적이 없으면 curLabel이 null이라 예외 터짐 방지
                     SpotFragment.getCurLabel().moveTo(LatLng.from(latitude, longitude));
