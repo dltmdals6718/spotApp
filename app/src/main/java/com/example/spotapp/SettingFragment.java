@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 
@@ -94,6 +95,7 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        // 카카오 로그인 버튼 클릭시
         Button kakaoLoginButton = view.findViewById(R.id.kakaoLoginButton);
         kakaoLoginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -107,6 +109,17 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
+
+        // 카카오 로그아웃 버튼 클릭시
+        Button kakaoLogoutButton = view.findViewById(R.id.kakaoLogoutButton);
+        kakaoLogoutButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                logout();
+
+            }
+        });
     }
 
     void login() {
@@ -116,10 +129,23 @@ public class SettingFragment extends Fragment {
                 System.out.println("로그인 실패");
             } else if (oAuthToken != null) {
                 System.out.println("로그인 성공 : " + oAuthToken);
+                getTokenInfo();
+                getUserInfo();
             }
             System.out.println("EXIT");
             return null;
         }));
+    }
+
+    void logout() {
+        UserApiClient.getInstance().logout(throwable -> {
+            if(throwable != null) {
+                System.out.println("로그아웃 실패(토큰삭제완료) : " + throwable);
+            } else {
+                System.out.println("로그아웃 성공(토큰삭제완료)");
+            }
+            return null;
+        });
     }
 
     void accountLogin() {
@@ -129,10 +155,55 @@ public class SettingFragment extends Fragment {
                 System.out.println("로그인 실패");
             } else if (oAuthToken != null) {
                 System.out.println("로그인 성공 : " + oAuthToken);
+                getTokenInfo();
+                getUserInfo();
             }
             System.out.println("EXIT");
             return null;
         });
     }
+
+    static void getUserInfo() {
+        UserApiClient.getInstance().me(((user, throwable) -> {
+            if(throwable != null) {
+                System.out.println("getUserInfo Fail : " + throwable);
+            } else {
+                System.out.println("getUserInfo Success");
+                System.out.println("user Id = " + user.getId());
+                System.out.println("user Account = " + user.getKakaoAccount());
+            }
+            return null;
+        }));
+    }
+
+    static void getTokenInfo() {
+        UserApiClient.getInstance().accessTokenInfo((accessTokenInfo, throwable) -> {
+            if(throwable != null) {
+                System.out.println("getTokenInfo Fail : " + throwable);
+            } else {
+                System.out.println("getTokenInfo Success");
+                System.out.println("accessTokenInfo Id = " + accessTokenInfo.getId());
+                System.out.println("accessTokenInfo.getExpiresIn() = " + accessTokenInfo.getExpiresIn());;
+            }
+
+            return null;
+        });
+    }
+
+    static void checkToken() {
+        if(AuthApiClient.getInstance().hasToken()) {
+            UserApiClient.getInstance().accessTokenInfo((accessTokenInfo, throwable) -> {
+                if(throwable != null) {
+                    System.out.println("[checkToken] 로그인 필요 또는 에러");
+                } else {
+                    System.out.println("[checkToken] 토큰 유효성 체크 성공(필요 시 토큰 갱신됨)");
+                }
+                return null;
+            });
+        } else {
+            System.out.println("[checkToken] 로그인 필요.");
+        }
+     }
+
 
 }
