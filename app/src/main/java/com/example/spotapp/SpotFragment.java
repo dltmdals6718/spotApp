@@ -8,6 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.spotapp.dto.CommonResponse;
+import com.example.spotapp.dto.location.Location;
+import com.example.spotapp.retrofit.Interface.LocationRetrofit;
+import com.example.spotapp.retrofit.RetrofitClient;
 import com.kakao.vectormap.KakaoMap;
 import com.kakao.vectormap.KakaoMapReadyCallback;
 import com.kakao.vectormap.LatLng;
@@ -20,6 +24,13 @@ import com.kakao.vectormap.label.LabelOptions;
 import com.kakao.vectormap.label.LabelStyle;
 import com.kakao.vectormap.label.LabelStyles;
 import com.kakao.vectormap.label.TrackingManager;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class SpotFragment extends Fragment {
 
@@ -132,6 +143,29 @@ public class SpotFragment extends Fragment {
         Label locationLabel2 = locationLayer.addLabel(locationOptions2);
         Label locationLabel3 = locationLayer.addLabel(locationOptions3);
         Label locationLabel4 = locationLayer.addLabel(locationOptions4);
+
+        Retrofit retrofit = RetrofitClient.getClient();
+        LocationRetrofit locationRetrofit = retrofit.create(LocationRetrofit.class);
+        Call<CommonResponse<List<Location>>> locations = locationRetrofit.getLocations(SpotFragment.getLatitude(), SpotFragment.getLongitude());
+        locations.enqueue(new Callback<CommonResponse<List<Location>>>() {
+            @Override
+            public void onResponse(Call<CommonResponse<List<Location>>> call, Response<CommonResponse<List<Location>>> response) {
+                if(response.isSuccessful()) {
+                    CommonResponse<List<Location>> commonResponse = response.body();
+                    List<Location> data = commonResponse.getData();
+                    for (Location datum : data) {
+                        System.out.println("datum = " + datum);
+                    }
+                } else {
+                    System.out.println("FAIL");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommonResponse<List<Location>>> call, Throwable t) {
+                System.out.println("Fail = " + t);
+            }
+        });
 
     }
 
