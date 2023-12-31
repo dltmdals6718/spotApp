@@ -1,13 +1,18 @@
 package com.example.spotapp;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,12 +20,21 @@ import com.example.spotapp.dto.Inquiry;
 import com.example.spotapp.retrofit.Interface.InquiryRetrofit;
 import com.example.spotapp.retrofit.RetrofitClient;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class InquiryActivity extends AppCompatActivity {
+
+    private List<MultipartBody.Part> files;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,13 +55,57 @@ public class InquiryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        Button imageSubmit = (Button) findViewById(R.id.inquiryImageUploadBtn);
+        ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                Uri imageUri = result.getData().getData();
+                // 여기서 서버로 이미지를 업로드하는 메서드를 호출합니다
+                uploadImageToServer(imageUri);
+
+            }
+        });
+        imageSubmit.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                System.out.println("imageSubmit Click!");
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityResult.launch(intent);
+            }
+        });
+    }
+
+    public void uploadImageToServer(Uri imageUri) {
+        System.out.println("imageUri = " + imageUri);
+        System.out.println("getRealPathFromURI(imageUri) = " + getRealPathFromURI(imageUri));
+        File file = new File(getRealPathFromURI(imageUri));
+        RequestBody requestBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
+        MultipartBody.Part part = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
+        files = new ArrayList<>();
+        files.add(part);
+    }
+
+    // Uri에서 실제 파일 경로 가져오기
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 
     public void addInquiry(String title, String name, String content) {
         Inquiry inquiry = new Inquiry(title, name, content);
         Retrofit retrofit = RetrofitClient.getClient();
         InquiryRetrofit inquiryRetrofit = retrofit.create(InquiryRetrofit.class);
-        Call<Inquiry> inquiryCall = inquiryRetrofit.addInquiry(inquiry);
+        Call<Inquiry> inquiryCall = inquiryRetrofit.addInquiry(inquiry, files);
+        for (MultipartBody.Part file : files) {
+            System.out.println("file = " + file);
+        }
         inquiryCall.enqueue(new Callback<Inquiry>() {
             @Override
             public void onResponse(Call<Inquiry> call, Response<Inquiry> response) {
