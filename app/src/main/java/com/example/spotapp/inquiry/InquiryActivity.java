@@ -1,4 +1,4 @@
-package com.example.spotapp;
+package com.example.spotapp.inquiry;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.spotapp.MainActivity;
+import com.example.spotapp.R;
 import com.example.spotapp.dto.Inquiry;
 import com.example.spotapp.retrofit.Interface.InquiryRetrofit;
 import com.example.spotapp.retrofit.RetrofitClient;
@@ -103,8 +105,11 @@ public class InquiryActivity extends AppCompatActivity {
         Retrofit retrofit = RetrofitClient.getClient();
         InquiryRetrofit inquiryRetrofit = retrofit.create(InquiryRetrofit.class);
         Call<Inquiry> inquiryCall = inquiryRetrofit.addInquiry(inquiry, files);
-        for (MultipartBody.Part file : files) {
-            System.out.println("file = " + file);
+
+        if(files != null) {
+            for (MultipartBody.Part file : files) {
+                System.out.println("file = " + file);
+            }
         }
         inquiryCall.enqueue(new Callback<Inquiry>() {
             @Override

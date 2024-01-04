@@ -1,20 +1,18 @@
-package com.example.spotapp;
+package com.example.spotapp.inquiry;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotapp.R;
+import com.example.spotapp.dto.CommonResponse;
 import com.example.spotapp.dto.InquiryData;
-import com.example.spotapp.dto.InquiryListResponse;
 import com.example.spotapp.retrofit.Interface.InquiryRetrofit;
 import com.example.spotapp.retrofit.RetrofitClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -39,12 +37,12 @@ public class InquiryListActivity extends AppCompatActivity {
     void getInquirys() {
         Retrofit retrofit = RetrofitClient.getClient();
         InquiryRetrofit inquiryRetrofit = retrofit.create(InquiryRetrofit.class);
-        Call<InquiryListResponse> inquiry = inquiryRetrofit.getInquirys();
-        inquiry.enqueue(new Callback<InquiryListResponse>() {
+        Call<CommonResponse<List<InquiryData>>> inquiry = inquiryRetrofit.getInquirys();
+        inquiry.enqueue(new Callback<CommonResponse<List<InquiryData>>>() {
             @Override
-            public void onResponse(Call<InquiryListResponse> call, Response<InquiryListResponse> response) {
+            public void onResponse(Call<CommonResponse<List<InquiryData>>> call, Response<CommonResponse<List<InquiryData>>> response) {
                 if(response.isSuccessful()) {
-                    InquiryListResponse listResponse = response.body();
+                    CommonResponse<List<InquiryData>> listResponse = response.body();
                     String status = listResponse.getStatus();
                     String message = listResponse.getMessage();
                     List<InquiryData> data = listResponse.getData();
@@ -67,7 +65,7 @@ public class InquiryListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<InquiryListResponse> call, Throwable t) {
+            public void onFailure(Call<CommonResponse<List<InquiryData>>> call, Throwable t) {
                 System.out.println("t = " + t);
             }
         });

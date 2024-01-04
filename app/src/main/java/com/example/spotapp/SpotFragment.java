@@ -110,6 +110,10 @@ public class SpotFragment extends Fragment {
                 return LatLng.from(35.24589, 128.6920);
             }
         });
+
+        SettingFragment.checkToken();
+        SettingFragment.getTokenInfo();
+        SettingFragment.getUserInfo();
         // Inflate the layout for this fragment
         return view;
     }

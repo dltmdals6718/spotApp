@@ -52,28 +52,28 @@
         </activity>
 
         <activity
-            android:name=".InquiryActivity"
+            android:name=".inquiry.InquiryActivity"
             android:label="문의하기"
             android:exported="true"
-            android:parentActivityName=".InquiryActivity"
+            android:parentActivityName=".inquiry.InquiryActivity"
             android:theme="@style/AppTheme"
             >
         </activity>
 
         <activity
-            android:name=".InquiryListActivity"
+            android:name=".inquiry.InquiryListActivity"
             android:label="문의내역"
             android:exported="true"
-            android:parentActivityName=".InquiryListActivity"
+            android:parentActivityName=".inquiry.InquiryListActivity"
             android:theme="@style/AppTheme"
             >
         </activity>
 
         <activity
-            android:name=".InquiryDetailActivity"
+            android:name=".inquiry.InquiryDetailActivity"
             android:label="문의상세보기"
             android:exported="true"
-            android:parentActivityName=".InquiryListActivity"
+            android:parentActivityName=".inquiry.InquiryListActivity"
             android:theme="@style/AppTheme"
             >
         </activity>

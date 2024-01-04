@@ -3,9 +3,7 @@ package com.example.spotapp.retrofit.Interface;
 import com.example.spotapp.dto.CommonResponse;
 import com.example.spotapp.dto.Inquiry;
 import com.example.spotapp.dto.InquiryCommentData;
-import com.example.spotapp.dto.InquiryCommentsResponse;
 import com.example.spotapp.dto.InquiryData;
-import com.example.spotapp.dto.InquiryListResponse;
 
 import java.util.List;
 
@@ -25,13 +23,13 @@ public interface InquiryRetrofit {
     Call<Inquiry> addInquiry(@Part("inquiry") Inquiry inquiry, @Part List<MultipartBody.Part> files);
 
     @GET("/inquirys/{id}")
-    Call<InquiryListResponse> getInquiry(@Path("id") Long id);
+    Call<CommonResponse<List<InquiryData>>> getInquiry(@Path("id") Long id);
 
     @GET("/inquirys")
-    Call<InquiryListResponse> getInquirys();
+    Call<CommonResponse<List<InquiryData>>> getInquirys();
 
     @GET("/comments/{inquiry_id}")
-    Call<InquiryCommentsResponse> getComments(@Path("inquiry_id") Long inquiry_id);
+    Call<CommonResponse<List<InquiryCommentData>>> getComments(@Path("inquiry_id") Long inquiry_id);
 
     @POST("/comments/{inquiry_id}")
     Call<CommonResponse<InquiryCommentData>> addComment(@Path("inquiry_id") Long inquiry_id, @Body InquiryCommentData inquiryCommentData);

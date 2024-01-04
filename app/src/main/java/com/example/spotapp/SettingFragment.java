@@ -12,8 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.spotapp.inquiry.InquiryActivity;
+import com.example.spotapp.inquiry.InquiryListActivity;
 import com.kakao.sdk.auth.AuthApiClient;
-import com.kakao.sdk.common.util.Utility;
 import com.kakao.sdk.user.UserApiClient;
 
 /**
@@ -158,12 +159,12 @@ public class SettingFragment extends Fragment {
                 getTokenInfo();
                 getUserInfo();
             }
-            System.out.println("EXIT");
             return null;
         });
     }
 
     static void getUserInfo() {
+        System.out.println("[SettingFragment.getUserInfo]");
         UserApiClient.getInstance().me(((user, throwable) -> {
             if(throwable != null) {
                 System.out.println("getUserInfo Fail : " + throwable);
@@ -177,6 +178,7 @@ public class SettingFragment extends Fragment {
     }
 
     static void getTokenInfo() {
+        System.out.println("[SettingFragment.getTokenInfo]");
         UserApiClient.getInstance().accessTokenInfo((accessTokenInfo, throwable) -> {
             if(throwable != null) {
                 System.out.println("getTokenInfo Fail : " + throwable);
@@ -191,6 +193,7 @@ public class SettingFragment extends Fragment {
     }
 
     static void checkToken() {
+        System.out.println("[SettingFragment.checkToken]");
         if(AuthApiClient.getInstance().hasToken()) {
             UserApiClient.getInstance().accessTokenInfo((accessTokenInfo, throwable) -> {
                 if(throwable != null) {

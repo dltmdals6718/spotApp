@@ -1,4 +1,4 @@
-package com.example.spotapp;
+package com.example.spotapp.inquiry;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotapp.R;
 import com.example.spotapp.dto.InquiryCommentData;
-import com.example.spotapp.dto.InquiryData;
 
 import java.util.List;
 

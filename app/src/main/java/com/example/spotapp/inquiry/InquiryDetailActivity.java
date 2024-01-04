@@ -1,4 +1,4 @@
-package com.example.spotapp;
+package com.example.spotapp.inquiry;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotapp.R;
 import com.example.spotapp.dto.CommonResponse;
 import com.example.spotapp.dto.InquiryCommentData;
-import com.example.spotapp.dto.InquiryCommentsResponse;
-import com.example.spotapp.dto.InquiryData;
-import com.example.spotapp.dto.InquiryListResponse;
 import com.example.spotapp.retrofit.Interface.InquiryRetrofit;
 import com.example.spotapp.retrofit.RetrofitClient;
 
@@ -77,13 +75,13 @@ public class InquiryDetailActivity extends AppCompatActivity {
     public void getComments() {
         Retrofit retrofit = RetrofitClient.getClient();
         InquiryRetrofit inquiryRetrofit = retrofit.create(InquiryRetrofit.class);
-        Call<InquiryCommentsResponse> inquiry = inquiryRetrofit.getComments(Long.parseLong(id));
+        Call<CommonResponse<List<InquiryCommentData>>> inquiry = inquiryRetrofit.getComments(Long.parseLong(id));
 
-        inquiry.enqueue(new Callback<InquiryCommentsResponse>() {
+        inquiry.enqueue(new Callback<CommonResponse<List<InquiryCommentData>>>() {
             @Override
-            public void onResponse(Call<InquiryCommentsResponse> call, Response<InquiryCommentsResponse> response) {
+            public void onResponse(Call<CommonResponse<List<InquiryCommentData>>> call, Response<CommonResponse<List<InquiryCommentData>>> response) {
                 if(response.isSuccessful()) {
-                    InquiryCommentsResponse commentsResponse = response.body();
+                    CommonResponse<List<InquiryCommentData>> commentsResponse = response.body();
                     String status = commentsResponse.getStatus();
                     List<InquiryCommentData> data = commentsResponse.getData();
                     String message = commentsResponse.getMessage();
@@ -107,7 +105,7 @@ public class InquiryDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<InquiryCommentsResponse> call, Throwable t) {
+            public void onFailure(Call<CommonResponse<List<InquiryCommentData>>> call, Throwable t) {
                 System.out.println("t = " + t);
             }
         });
