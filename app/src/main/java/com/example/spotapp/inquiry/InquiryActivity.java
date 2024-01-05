@@ -1,5 +1,6 @@
 package com.example.spotapp.inquiry;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,6 +16,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotapp.MainActivity;
 import com.example.spotapp.R;
@@ -36,12 +39,16 @@ import retrofit2.Retrofit;
 
 public class InquiryActivity extends AppCompatActivity {
 
-    private List<MultipartBody.Part> files;
+    private List<MultipartBody.Part> files = new ArrayList<>();
+    private List<Uri> uriList = new ArrayList<>();
+    RecyclerView recyclerView;
+    MultiImageAdapter multiImageAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inquiry_page);
+        recyclerView = findViewById(R.id.rv_inquiryImageUpload);
 
         Button inquirySubmit = (Button) findViewById(R.id.inquirySubmit);
         inquirySubmit.setOnClickListener(new View.OnClickListener() {
@@ -61,9 +68,40 @@ public class InquiryActivity extends AppCompatActivity {
         Button imageSubmit = (Button) findViewById(R.id.inquiryImageUploadBtn);
         ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                Uri imageUri = result.getData().getData();
-                // 여기서 서버로 이미지를 업로드하는 메서드를 호출합니다
-                uploadImageToServer(imageUri);
+
+                ClipData clipData = result.getData().getClipData();
+
+                if(clipData == null) {
+                    System.out.println("이미지 하나 선택");
+
+                    Uri uri = result.getData().getData();
+                    System.out.println("uri = " + uri);
+                    System.out.println("getRealPathFromURI(imageUri) = " + getRealPathFromURI(uri));
+                    uploadImageToServer(uri);
+                    uriList.add(uri);
+                } else {
+                    System.out.println("이미지 여러개 선택");
+                    for(int i=0; i<clipData.getItemCount(); i++) {
+                        Uri uri = clipData.getItemAt(i).getUri();
+                        System.out.println("uri = " + uri.getPath());
+                        System.out.println("getRealPathFromURI(imageUri) = " + getRealPathFromURI(uri));
+                        uploadImageToServer(uri);
+                        uriList.add(uri);
+                    }
+                }
+
+                multiImageAdapter = new MultiImageAdapter(uriList, getApplicationContext());
+                recyclerView.setAdapter(multiImageAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+
+
+
+
+
+
+//                Uri imageUri = result.getData().getData();
+//                // 여기서 서버로 이미지를 업로드하는 메서드를 호출합니다
+//                uploadImageToServer(imageUri);
 
             }
         });
@@ -76,6 +114,7 @@ public class InquiryActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityResult.launch(intent);
             }
         });
@@ -87,7 +126,6 @@ public class InquiryActivity extends AppCompatActivity {
         File file = new File(getRealPathFromURI(imageUri));
         RequestBody requestBody = RequestBody.create(file, MediaType.parse("multipart/form-data"));
         MultipartBody.Part part = MultipartBody.Part.createFormData("files", file.getName(), requestBody);
-        files = new ArrayList<>();
         files.add(part);
     }
 

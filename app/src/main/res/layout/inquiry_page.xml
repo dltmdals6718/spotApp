@@ -25,6 +25,12 @@
         android:hint="내용">
     </EditText>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_inquiryImageUpload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+
     <Button
         android:id="@+id/inquiryImageUploadBtn"
         android:layout_width="wrap_content"
@@ -37,6 +43,7 @@
         android:layout_height="25pt"
         android:text="제출">
     </Button>
+
 
 
 </LinearLayout>
