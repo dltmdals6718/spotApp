@@ -1,6 +1,7 @@
 package com.example.spotapp.inquiry;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotapp.Image.ImageAdapter;
 import com.example.spotapp.R;
 import com.example.spotapp.dto.CommonResponse;
+import com.example.spotapp.dto.ImageFile;
 import com.example.spotapp.dto.InquiryCommentData;
 import com.example.spotapp.retrofit.Interface.InquiryRetrofit;
 import com.example.spotapp.retrofit.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,6 +32,10 @@ import retrofit2.Retrofit;
 public class InquiryDetailActivity extends AppCompatActivity {
     TextView detail_title, detail_name, detail_content, detail_regDate;
     String id, title, name, content, regDate;
+
+    List<String> imageFiles;
+    RecyclerView recyclerView;
+    ImageAdapter imageAdapter;
 
 
     @Override
@@ -65,6 +73,18 @@ public class InquiryDetailActivity extends AppCompatActivity {
         name = intent.getExtras().getString("name");
         content = intent.getExtras().getString("content");
         regDate = intent.getExtras().getString("regDate");
+
+        imageFiles = intent.getExtras().getStringArrayList("images");
+        for (String imageFile : imageFiles) {
+            System.out.println("imageFile = " + imageFile);
+        }
+
+        recyclerView = findViewById(R.id.rv_inquiryImageShow);
+        imageAdapter = new ImageAdapter(imageFiles, getApplicationContext());
+        recyclerView.setAdapter(imageAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+
+
 
         detail_title.setText(title);
         detail_name.setText(name);

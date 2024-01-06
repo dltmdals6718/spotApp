@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class InquiryData {
 
@@ -23,9 +24,21 @@ public class InquiryData {
     @SerializedName("regDate")
     private String regDate;
 
+    @SerializedName("images")
+    private List<ImageFile> images;
+
     @Override
     public String toString() {
-        return "InquiryData{ id:" + id + " name:" + name + " title:" + title + " content:" + content + " regDate:" + regDate + "}";
+        String str = "InquiryData{ id:" + id + " name:" + name + " title:" + title + " content:" + content + " regDate:" + regDate + " fileNameList:";
+
+        if(images!=null) {
+            for (ImageFile image : images) {
+                str+=image;
+            }
+        }
+
+        str+="}";
+        return str;
     }
 
     public String getId() {
@@ -54,5 +67,9 @@ public class InquiryData {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<ImageFile> getImages() {
+        return images;
     }
 }

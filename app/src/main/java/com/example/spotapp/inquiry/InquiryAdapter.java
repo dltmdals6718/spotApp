@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotapp.R;
+import com.example.spotapp.dto.ImageFile;
 import com.example.spotapp.dto.InquiryData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.InquiryViewHolder> {
@@ -70,6 +72,12 @@ public class InquiryAdapter extends RecyclerView.Adapter<InquiryAdapter.InquiryV
                     inquiryDetailActivity.putExtra("name", inquiryData.getName());
                     inquiryDetailActivity.putExtra("content", inquiryData.getContent());
                     inquiryDetailActivity.putExtra("regDate", inquiryData.getRegDate());
+
+                    ArrayList<String> storeFileNameList = new ArrayList<>();
+                    for (ImageFile image : inquiryData.getImages()) {
+                        storeFileNameList.add(image.getStoreFileName());
+                    }
+                    inquiryDetailActivity.putStringArrayListExtra("images", storeFileNameList);
 
                     context.startActivity(inquiryDetailActivity);
 
