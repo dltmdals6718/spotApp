@@ -134,19 +134,7 @@ public class SpotFragment extends Fragment {
         LabelLayer locationLayer = myKakaoMap.getLabelManager().getLayer("locationLayer");
 
 
-        LabelOptions locationOptions1 = LabelOptions.from(LatLng.from(latitude-0.01,longitude-0.01))
-                .setStyles(locationStyles);
-        LabelOptions locationOptions2 = LabelOptions.from(LatLng.from(latitude-0.01,longitude+0.01))
-                .setStyles(locationStyles);
-        LabelOptions locationOptions3 = LabelOptions.from(LatLng.from(latitude+0.01,longitude-0.01))
-                .setStyles(locationStyles);
-        LabelOptions locationOptions4 = LabelOptions.from(LatLng.from(latitude+0.01,longitude+0.01))
-                .setStyles(locationStyles);
 
-        Label locationLabel1 = locationLayer.addLabel(locationOptions1);
-        Label locationLabel2 = locationLayer.addLabel(locationOptions2);
-        Label locationLabel3 = locationLayer.addLabel(locationOptions3);
-        Label locationLabel4 = locationLayer.addLabel(locationOptions4);
 
         Retrofit retrofit = RetrofitClient.getClient();
         LocationRetrofit locationRetrofit = retrofit.create(LocationRetrofit.class);
@@ -157,8 +145,22 @@ public class SpotFragment extends Fragment {
                 if(response.isSuccessful()) {
                     CommonResponse<List<Location>> commonResponse = response.body();
                     List<Location> data = commonResponse.getData();
-                    for (Location datum : data) {
-                        System.out.println("datum = " + datum);
+                    for (Location location : data) {
+
+                        LabelOptions locationOptions1 = LabelOptions.from(LatLng.from(location.getLatitude(),location.getLongitude()))
+                                .setStyles(locationStyles);
+
+                        Label locationLabel = locationLayer.addLabel(locationOptions1);
+                        locationLabel.setTexts(location.getTitle());
+                        myKakaoMap.setOnLabelClickListener(new KakaoMap.OnLabelClickListener() {
+                            @Override
+                            public void onLabelClicked(KakaoMap kakaoMap, LabelLayer layer, Label label) {
+                                for (String text : label.getTexts()) {
+                                    System.out.println("text = " + text);
+                                }
+
+                            }
+                        });
                     }
                 } else {
                     System.out.println("FAIL");

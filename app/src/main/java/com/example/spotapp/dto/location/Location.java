@@ -34,4 +34,28 @@ public class Location {
                 ", description='" + description + '\'' +
                 '}';
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             // GPS로부터 위치 업데이트를 요청합니다.
             // 500ms마다 위치 업데이트 요청 보냄.
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
         } catch (SecurityException e) {
             e.printStackTrace();
         }
